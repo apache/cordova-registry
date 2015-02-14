@@ -2,10 +2,9 @@ var updates = exports
 
 updates.package = function (doc, req) {
   require("monkeypatch").patch(Object, Date, Array, String)
-
   var semver = require("semver")
   var valid = require("valid")
-  function error (reason) {
+  function error (reason) {;
     return [{_id: "error: forbidden", forbidden:reason}, JSON.stringify({forbidden:reason})]
   }
 
@@ -94,14 +93,16 @@ updates.package = function (doc, req) {
     // update the package info
     var newdoc = JSON.parse(req.body)
       , changed = false
-    if (doc._rev && doc._rev !== newdoc._rev) {
+
+    /*if (doc._rev && doc._rev !== newdoc._rev) {
       return error( "must supply latest _rev to update existing package" )
-    }
+    }*/
     for (var i in newdoc) if (typeof newdoc[i] === "string" || i === "maintainers") {
       doc[i] = newdoc[i]
     }
     if (newdoc.versions) {
       doc.versions = newdoc.versions
+      
     }
     if (newdoc["dist-tags"]) {
       doc["dist-tags"] = newdoc["dist-tags"]
