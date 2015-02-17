@@ -3,6 +3,8 @@ module.exports = function (doc, oldDoc, user, dbCtx) {
     if (!ok) throw {forbidden:message}
   }
 
+  log('validate');
+  log(user);
   // can't write to the db without logging in.
   if (!user) {
     throw { unauthorized: "Please log in before writing to the db" }
@@ -113,16 +115,23 @@ module.exports = function (doc, oldDoc, user, dbCtx) {
 
   // check if the user is allowed to write to this package.
   function validUser () {
+    log('validUser');
+    
     if ( !oldDoc || !oldDoc.maintainers ) return true
     //if (isAdmin()) return true
+    log(oldDoc.maintainers);
     if (typeof oldDoc.maintainers !== "object") return true
     for (var i = 0, l = oldDoc.maintainers.length; i < l; i ++) {
+      log('i');
       if (oldDoc.maintainers[i].name === user.name) return true
     }
     return false
   }
 
   function isAdmin () {
+      log("isAdmin");
+      log(user.name);
+      log(dbCtx.admins)
     if (dbCtx &&
         dbCtx.admins) {
       if (dbCtx.admins.names &&
@@ -132,11 +141,14 @@ module.exports = function (doc, oldDoc, user, dbCtx) {
         if (dbCtx.admins.roles.indexOf(user.roles[i]) !== -1) return true
       }
     }
+    log('user.roles.indexOf');
+    log(user.roles);
     return user && user.roles.indexOf("_admin") >= 0
   }
 
   try {
     var vu = validUser()
+    log(vu);
   } catch (er) {
     assert(false, "problem checking user validity");
   }
