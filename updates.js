@@ -3,6 +3,21 @@ var updates = exports
 updates.package = function (doc, req) {
   require("monkeypatch").patch(Object, Date, Array, String)
 
+var tempbody = JSON.parse(req.body);
+//only allow npm client 1.3.4 to publish
+if(tempbody['_npmVersion']) {
+  if(tempbody['_npmVersion'] != '1.3.4') {
+    return error('This version of plugman publish is broken, please update plugman with npm install -g plugman@latest.');
+  }
+} else {
+  //npm 1.4.28 didn't have a root level _npmVersion
+  var latest = tempbody['dist-tags']['latest'];
+  if(latest) {
+    if(tempbody.versions[latest]._npmVersion != '1.3.4') {
+      return error('This version of plugman publish is broken, please update plugman with npm install -g plugman@latest.');
+    }
+  }
+}
   var semver = require("semver")
   var valid = require("valid")
   function error (reason) {
