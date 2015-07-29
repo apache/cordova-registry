@@ -4,7 +4,7 @@
   "description": "Registry files for the Cordova Plugin Registry. http://plugins.cordova.io",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "serve": "couchapp push app.js http://localhost:5984/registry"
   },
   "repository": {
     "type": "git",
