@@ -1,7 +1,10 @@
 var updates = exports
 
 updates.package = function (doc, req) {
+return error('The plugin reigstry has switcehd to read-only!, please publish your plugins to npm. Learn more at http://plugins.cordova.io/npm/authors.html.');
+/*
   require("monkeypatch").patch(Object, Date, Array, String)
+
 
 var tempbody = JSON.parse(req.body);
 //only allow npm client 1.3.4 to publish
@@ -20,9 +23,11 @@ if(tempbody['_npmVersion']) {
 }
   var semver = require("semver")
   var valid = require("valid")
+  */
   function error (reason) {
     return [{_id: "error: forbidden", forbidden:reason}, JSON.stringify({forbidden:reason})]
   }
+/*
 
   function ok (doc, message) {
     delete doc.mtime
@@ -143,5 +148,5 @@ if(tempbody['_npmVersion']) {
     if (!doc['dist-tags']) doc['dist-tags'] = {}
     if (latest) doc["dist-tags"].latest = latest
     return ok(doc, "created new entry")
-  }
+  }*/
 }
